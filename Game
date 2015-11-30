@@ -2,6 +2,8 @@ package com.thefallenpaladin.fighting;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -10,10 +12,15 @@ import java.awt.event.MouseListener;
  */
 class Game extends JPanel implements MouseListener {
     
-    final String windowOne_NAME = "Game.";
+    final String windowOne_NAME = "Game."; // window stats
     final int windowOne_WIDTH = 600;
     final int windowOne_HEIGHT = windowOne_WIDTH / 10 * 8;
-    
+
+    int level = 0; // Gamestate stats.
+
+    public Timer timer;
+    public int timerSpeed;
+
     public static void main(String[] args) {
         Game game = new Game();
         
@@ -26,12 +33,15 @@ class Game extends JPanel implements MouseListener {
         windowOne.setFocusable(true);
         windowOne.requestFocusInWindow();
         windowOne.setLocationRelativeTo(null);
+        while(true) {
+            game.gameTimer();
+        }
     }
-    
+
     public void paint(Graphics g) {
-        
+
     }
-    
+
     @Override
     public void mouseClicked(MouseEvent e) {
         
@@ -55,5 +65,16 @@ class Game extends JPanel implements MouseListener {
     @Override
     public void mouseExited(MouseEvent e) {
 
+    }
+
+    @SuppressWarnings("unchecked")
+    public void gameTimer(){
+        timer = new Timer(timerSpeed, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        timer.start();
     }
 }
