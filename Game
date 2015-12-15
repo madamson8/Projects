@@ -2,54 +2,150 @@ package com.thefallenpaladin.fighting;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 
 /**
  * Created by ma039102 on 11/30/2015.
+ * 
+ * Game currently starts after 5 seconds
  */
-class Game extends JPanel implements MouseListener {
-    
+class Game extends JPanel implements MouseListener, KeyListener {
+
     final String windowOne_NAME = "Game."; // window stats
-    final int windowOne_WIDTH = 600;
-    final int windowOne_HEIGHT = windowOne_WIDTH / 10 * 8;
+    final int WINDOW_WIDTH = 600;
+    final int WINDOW_HEIGHT = WINDOW_WIDTH / 10 * 8;
 
     int level = 0; // Gamestate stats.
+    int mouseX;
+    int mouseY;
+    int levelOpen = 0;
+    public int playerOnePosX = 200;
+    public int playerTwoPosX = 400;
+    public int playerOnePosY = 300;
+    public int playerTwoPosY = 300;
+    boolean requestClosing = false;
+    boolean gravity = true;
 
-    public Timer timer;
+    public Timer timer; // Timer stats
     public int timerSpeed;
+
+    int buttonX = 300;
+    int buttonY = 150;
+    int buttonS = 50;
+
+    //DO NOT TOUCH
+    int secondsPassed = 0;
+    long currentTime = System.currentTimeMillis();
+    boolean openAllowed = true;
+    //Test variables
+
+    boolean Once = true;
 
     public static void main(String[] args) {
         Game game = new Game();
-        
-        JFrame windowOne = new JFrame(game.windowOne_NAME);
-        windowOne.setSize(game.windowOne_WIDTH,game.windowOne_HEIGHT);
-        windowOne.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+        game.gameTimer();
+        game.windowOne();
+        while(true) { // Main loop
+            game.running();
+            game.closing();
+        }
+    }
+    JFrame windowOne = new JFrame("1"); // Creates the window  ,note: outside of windowOne() so it can be disposed.
+    public void windowOne() {
+        Game game = new Game();
+        levelOpen = 0;
+
+
+        windowOne.setSize(WINDOW_WIDTH, WINDOW_HEIGHT); // Sets size
+        windowOne.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); // Sets close on exit
+        windowOne.setResizable(false);
         windowOne.setVisible(true);
-        windowOne.add(game);
-        windowOne.addMouseListener(game);
+        windowOne.add(game); // adds the game so that you can add things like listeners to it later.
+        windowOne.addMouseListener(game); // Generally, JFrames should only hold one focus or listener
         windowOne.setFocusable(true);
         windowOne.requestFocusInWindow();
-        windowOne.setLocationRelativeTo(null);
-        while(true) {
-            game.gameTimer();
+        windowOne.setLocationRelativeTo(null); // sets the location of the jframe in the middle of the screen
+    }
+
+    public void running() {
+        Game game = new Game();
+
+        if(currentTime+1000 < System.currentTimeMillis()) { //Calculates One second
+            currentTime = System.currentTimeMillis();// Resets the calculations
+            secondsPassed += 1; // How many seconds have passed since the last reset or start of game.
+        }
+
+        if(secondsPassed > 5 && openAllowed) {
+            windowTwo();
+            requestClosing = true;
+            openAllowed = false;
         }
     }
 
-    public void paint(Graphics g) {
+    public void closing() {
+        if(requestClosing) {
+            loadingScreen();
+            windowOne.dispose();
+            requestClosing = false;
+            System.out.println("Fine");
+        }
+    }
 
+    public void loadingScreen() { // Initializes the loading screen.
+        JFrame loading = new JFrame("2");
+        loading.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        loading.setSize(WINDOW_WIDTH,WINDOW_HEIGHT);
+        loading.setResizable(false);
+        loading.setVisible(true);
+        loading.setLocationRelativeTo(null);
+        try {
+            windowTwo();
+            loading.dispose();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void windowTwo() { // Declares fighting screen. refer to windowOne if not sure what commands do
+        Game game = new Game();
+
+        JFrame windowTwo = new JFrame("3");
+        windowTwo.add(game);
+        windowTwo.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        windowTwo.setResizable(false);
+        windowTwo.setVisible(true);
+        windowTwo.addKeyListener(game);
+        windowTwo.setFocusable(true);
+        windowTwo.setSize(WINDOW_WIDTH,WINDOW_HEIGHT);
+        windowTwo.setLocationRelativeTo(null);
+    }
+    
+    @Override
+    public void paintComponent(Graphics g) { // as little logic as possible goes in here
+        g.fillRect(buttonX,buttonY,buttonS,buttonS);
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        
+
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-
+        mouseX = e.getX();
+        mouseY = e.getY();
+//        System.out.println(mouseX);
+//        System.out.println(mouseY);
+//        requestClosing = true;
+        if(mouseX > buttonX && //Not recongized for some reason.  TODO
+                mouseX < buttonX + buttonS) {
+            requestClosing = true;
+        } else {
+            requestClosing = false;
+        }
+        System.out.println("HEllo");
+        System.out.println(requestClosing);
     }
 
     @Override
@@ -64,6 +160,21 @@ class Game extends JPanel implements MouseListener {
 
     @Override
     public void mouseExited(MouseEvent e) {
+
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        System.out.println(e);
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
 
     }
 
