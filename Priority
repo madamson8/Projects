@@ -1,0 +1,8 @@
+package com.thefallenpaladin.fighting;
+
+/**
+ * Created by ma039102 on 12/16/2015.
+ */
+public class ListingPriority {
+    public final int LUCINA = 0;
+}
