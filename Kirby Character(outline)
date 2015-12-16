@@ -1,0 +1,42 @@
+package com.fallenPalleden.fighting.charicters;
+
+public class Kirby {
+    //all of kirbys ints
+    public int kirbyHealth = 0;
+    public int kirbyVY = 0;
+    //4 booleans each is set false but will be set true if it is a certain smash
+    public boolean smashes[] = {false, false, false, false};
+    public boolean standingAttack[] = {false, false, false, false};
+    public boolean standardAttack[] = {false, false, false, false};
+    //left right kirby boolean array
+    public boolean kirbyLR[] = {false, false};
+    public boolean kirbyUp = false;
+    public boolean kirbyGravity = true;
+
+    public void kirbyCalculations(int kirbyX, int kirbyY){
+        if(kirbyY >= (600/10*8)) {
+            kirbyY = 0;
+        }
+        if(kirbyY >= (600/10*8) - 60) {
+            kirbyVY = 0;
+            kirbyY = (600/10*8) - 60;
+        }
+        if(kirbyGravity) {
+            kirbyVY += 1;
+            kirbyY += kirbyVY;
+            if(kirbyVY >= 15){
+                kirbyVY = 15;
+            }
+        }
+        if(kirbyLR[0]) {
+            kirbyX--;
+        }
+        if(kirbyLR[1]) {
+            kirbyX++;
+        }
+    }
+
+    public void kirbyHealth(int attackDamage){
+        this.kirbyHealth += attackDamage;
+    }
+}
