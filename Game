@@ -35,22 +35,19 @@ public class Game extends JPanel implements MouseListener, KeyListener {
     int secondsPassed = 0;
     long currentTime = System.currentTimeMillis();
     boolean openAllowed = false;
-    //Test variables
-
-    boolean Once = true;
 
     public static void main(String[] args) {
         Game game = new Game();
 
-        game.windowOne();
+        game.windowOne(false);
         game.gameTimer();
     }
 
-    public void windowOne() {
+    public void windowOne(boolean close) {
         Game game = new Game();
 
         level = 1;
-        JFrame windowOne = new JFrame("1"); // Creates the window  ,note: outside of windowOne() so it can be disposed.
+        final JFrame windowOne = new JFrame("1"); // Creates the window  ,note: outside of windowOne() so it can be disposed.
         windowOne.setSize(WINDOW_WIDTH, WINDOW_HEIGHT); // Sets size
         windowOne.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); // Sets close on exit
         windowOne.setResizable(false);
@@ -60,11 +57,14 @@ public class Game extends JPanel implements MouseListener, KeyListener {
         windowOne.setFocusable(true);
         windowOne.requestFocusInWindow();
         windowOne.setLocationRelativeTo(null); // sets the location of the jframe in the middle of the screen
+        if(close){
+            windowOne.dispose();
+        }
     }
 
     public void running() {
         Game game = new Game();
-        
+
         if(currentTime+1000 < System.currentTimeMillis()) { //Calculates One second
             currentTime = System.currentTimeMillis();// Resets the calculations
             secondsPassed += 1; // How many seconds have passed since the last reset or start of game.
@@ -85,6 +85,7 @@ public class Game extends JPanel implements MouseListener, KeyListener {
             loadingScreen();
             requestClosing = false;
             System.out.println("Fine");
+            windowOne(true);
         }
     }
 
