@@ -6,7 +6,7 @@ import java.awt.event.*;
 
 /**
  * Created by ma039102 on 11/30/2015.
- * 
+ *
  * Game currently starts after 5 seconds
  */
 class Game extends JPanel implements MouseListener, KeyListener {
@@ -36,7 +36,7 @@ class Game extends JPanel implements MouseListener, KeyListener {
     //DO NOT TOUCH
     int secondsPassed = 0;
     long currentTime = System.currentTimeMillis();
-    boolean openAllowed = true;
+    boolean openAllowed = false;
     //Test variables
 
     boolean Once = true;
@@ -51,12 +51,12 @@ class Game extends JPanel implements MouseListener, KeyListener {
             game.closing();
         }
     }
-    JFrame windowOne = new JFrame("1"); // Creates the window  ,note: outside of windowOne() so it can be disposed.
+
     public void windowOne() {
         Game game = new Game();
-        levelOpen = 0;
 
 
+        JFrame windowOne = new JFrame("1"); // Creates the window  ,note: outside of windowOne() so it can be disposed.
         windowOne.setSize(WINDOW_WIDTH, WINDOW_HEIGHT); // Sets size
         windowOne.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); // Sets close on exit
         windowOne.setResizable(false);
@@ -75,13 +75,12 @@ class Game extends JPanel implements MouseListener, KeyListener {
             currentTime = System.currentTimeMillis();// Resets the calculations
             secondsPassed += 1; // How many seconds have passed since the last reset or start of game.
         }
-        
-        if(requestClosing){
+
+        if(requestClosing) {
             loadingScreen();
         }
-        
+
         if(secondsPassed > 5 && openAllowed) {
-            windowTwo();
             requestClosing = true;
             openAllowed = false;
         }
@@ -90,7 +89,6 @@ class Game extends JPanel implements MouseListener, KeyListener {
     public void closing() {
         if(requestClosing) {
             loadingScreen();
-            windowOne.dispose();
             requestClosing = false;
             System.out.println("Fine");
         }
@@ -110,7 +108,7 @@ class Game extends JPanel implements MouseListener, KeyListener {
             e.printStackTrace();
         }
     }
-    
+
     public void windowTwo() { // Declares fighting screen. refer to windowOne if not sure what commands do
         Game game = new Game();
 
@@ -124,7 +122,7 @@ class Game extends JPanel implements MouseListener, KeyListener {
         windowTwo.setSize(WINDOW_WIDTH,WINDOW_HEIGHT);
         windowTwo.setLocationRelativeTo(null);
     }
-    
+
     @Override
     public void paintComponent(Graphics g) { // as little logic as possible goes in here
         g.fillRect(buttonX,buttonY,buttonS,buttonS);
@@ -139,16 +137,10 @@ class Game extends JPanel implements MouseListener, KeyListener {
     public void mousePressed(MouseEvent e) {
         mouseX = e.getX();
         mouseY = e.getY();
-//        System.out.println(mouseX);
-//        System.out.println(mouseY);
-//        requestClosing = true;
         if(mouseX > buttonX && //Not recongized for some reason.  TODO
                 mouseX < buttonX + buttonS) {
-            requestClosing = true;
-        } else {
-            requestClosing = false;
+            loadingScreen();
         }
-        System.out.println("HEllo");
         System.out.println(requestClosing);
     }
 
