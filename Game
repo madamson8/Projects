@@ -75,7 +75,11 @@ class Game extends JPanel implements MouseListener, KeyListener {
             currentTime = System.currentTimeMillis();// Resets the calculations
             secondsPassed += 1; // How many seconds have passed since the last reset or start of game.
         }
-
+        
+        if(requestClosing){
+            loadingScreen();
+        }
+        
         if(secondsPassed > 5 && openAllowed) {
             windowTwo();
             requestClosing = true;
